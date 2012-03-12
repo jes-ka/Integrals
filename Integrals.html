@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Solving Integrals with Trapezoids</title>
+		<meta name="description" content="Finding areas under a curve using trapezoids.">
+		<meta name="author" content="Jessica Johnson">
+		
+		<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+		<!--[if lt IE 9]>
+		  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		
+		<!-- JQuery -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+		<!-- Begin Integral Calculations -->
+		<script type="text/javascript">
+		
+		/* ----------------------------------------
+		 * This method uses trapezoids measure the
+		 * area under a curve. 
+		 * 
+		 * Delta is how we take into account the
+		 * height of each trapezoid, as N is 
+		 * defined by the user.
+		 * ---------------------------------------- */
+		
+
+			function trapezoidFn(a, b, N, func) {
+				var delta = (b - a) / N;
+				var area = 0.0;
+													
+		/* ----------------------------------------
+		 * For Loops are usefule with math formulas
+		 * because they let us calculate as many
+		 * data points as we like by changing N,
+		 * the number of iterations.
+		 * 
+		 * A larger N means we will draw smaller
+		 * and smaller trapezoids, which gives a
+		 * more accurate area under the curve.
+		 * ---------------------------------------- */																	
+																		
+				
+				for (var i=0; i < N; i++) {
+					var y = a + (i * delta);
+					var y2 = y + delta;
+					area += ((delta / 2) * (func(y) + func(y2)));
+				};
+				
+				return area; 
+			}
+
+
+		/* ----------------------------------------
+		 * 			AREA OF A TRAPEZOID
+		 * 
+		 *    A = (height/2) x (base1 + base2)
+		 * 
+		 * Area = half the height of the trapezoid 
+		 * delta) times the addition of the two
+		 * bases (the output for y and y2 of the
+		 * curve). 
+		 * ---------------------------------------- */
+						
+						
+		/* These three functions below are defined by the program. */
+
+			function fn3(x) {			/* fn3 simply returns a 3. */
+				return 3;
+			}
+			
+			function fn2(x) {			/* fn2 is a very crazy equation. Answers should get close to 105. */
+				return(Math.exp(x) * Math.sqrt(x) * Math.log(x));
+			}
+			
+			function fn1(x) {			/* fn1 is just x^3, and should get close to 63. */
+				return(x*x*x);
+			}
+
+		/* End the three defined equations for this program. */
+
+		/* Here is wehre we get the inputed values, and use them for fn1 and fn2. */
+			function solveTrap() {
+				var aval, bval, nval;
+				aval = Number($('#aVal').val());
+				bval = Number($('#bVal').val());
+				nval = Number($('#nVal').val());
+				
+				var returnValue = 'x^3 = ' + trapezoidFn(aval, bval, nval, fn1) + '<br/>exp^x*sqrt x*log x = ' + trapezoidFn(aval, bval, nval, fn2);
+				
+				$('#outputLabel').html(returnValue);	/* Get our answer so we can display it to the user. */
+			}
+		</script>
+	</head>
+	
+	<body>
+
+<!-- Here is where you ask for input from the user in html format. Make it as pretty as you like! -->
+
+		Lower Limit: <input type="text" name="aVal" id="aVal"></input><br />
+		Upper Limit: <input type="text" name="bVal" id="bVal"></input><br />
+		Number of Trapezoids: <input type="text" name="nVal" id="nVal"></input><br />
+		<button type="button" onclick="solveTrap();">Solve!</button>
+		
+		<br /><br />
+		
+		<div id="outputLabel"></div>   <!-- Here's the answer. -->
+		
+	</body>
+</html>
